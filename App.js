@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useContext } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,6 +9,7 @@ import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import { Colors } from './constants/styles';
+import AuthContextProvider, { AuthContext } from './store/auth-context';
 // import firebase from 'firebase/app';
 // import 'firebase/auth';
 //https://reactnavigation.org/docs/getting-started/
@@ -59,19 +61,22 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
+ const authCtx = useContext(AuthContext)
   return (
     <NavigationContainer>
-      <AuthStack />
-    </NavigationContainer>
-  );
+   {!authCtx.isAuthenticated && <AuthStack />}
+   {authCtx.isAuthenticated && <AuthenticatedStack />}
+   </NavigationContainer>
+    );
 }
 
 export default function App() {
   return (
     <>
       <StatusBar style="light" />
-
+      <AuthContextProvider>
       <Navigation />
+     </AuthContextProvider>
     </>
   );
 }

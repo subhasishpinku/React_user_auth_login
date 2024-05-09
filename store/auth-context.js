@@ -1,9 +1,9 @@
-import {createContext, useState, useState} from 'react';
+import {createContext, useState} from 'react';
 
 export const AuthContext = createContext({
     token: '',
     isAuthenticated: false,
-    authenticate: () => {},
+    authenticate: (token) => {},
     logout: () => {}
 
 });
@@ -11,10 +11,19 @@ export const AuthContext = createContext({
 function AuthContextProvider({children}){
     const [authToken, setAuthToken] = useState();
 
-    function authenticate(){
-        
+    function authenticate(token){
+        setAuthToken(token);
     }
-  return <AuthContext.Provider>{children}</AuthContext.Provider>
+    function logout(){
+      setAuthToken(null);
+    }
+    const value ={
+        token: authToken,
+        isAuthenticated: !!authToken,
+        authenticate: authenticate,
+        logout:logout
+    }
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export default AuthContextProvider;
