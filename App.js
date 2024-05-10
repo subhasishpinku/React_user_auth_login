@@ -5,7 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppLoading from 'expo-app-loading';
+// import AppLoading from 'expo-app-loading';
+// import { AppLoading } from 'expo';
+
 import LoginScreen from './screens/LoginScreen';
 import { SplashScreen } from 'expo-splash-screen'
 
@@ -27,6 +29,14 @@ import IconButton from './components/ui/IconButton';
 //npm install @react-native-firebase/auth
 //npm install expo-app-loading is derecated 
 //npm install expo-splash-screen
+//npx expo-doctor 
+//npx expo-doctor --fix-dependencies
+//npx expo install --check
+//npm uninstall expo-app-loading
+//expo upgrade
+//expo --version
+//npm install -g expo-cli
+//expo upgrade 51.0.0
 
 // Initialize Firebase
 // const firebaseConfig = {
@@ -96,7 +106,7 @@ function Root(){
    }, []);
 
    if(isTryingLogin){
-     return <AppLoading />
+    //  return <SplashScreen />
    }
   return   <Navigation /> 
 }
