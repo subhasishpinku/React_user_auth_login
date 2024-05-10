@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useContext } from 'react';
+import { useContext , useEffect, useState} from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppLoading from 'expo-app-loading';
 import LoginScreen from './screens/LoginScreen';
+import { SplashScreen } from 'expo-splash-screen'
+
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import { Colors } from './constants/styles';
@@ -20,7 +23,11 @@ import IconButton from './components/ui/IconButton';
 //npm install @react-navigation/bottom-tabs
 //npm install axios
 //npm install firebase
+//npm install @react-native-async-storage/async-storage
 //npm install @react-native-firebase/auth
+//npm install expo-app-loading is derecated 
+//npm install expo-splash-screen
+
 // Initialize Firebase
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyCeEQuPqMv8-rYB4D7VvymMG7SL2hXzUzA',
@@ -55,8 +62,7 @@ function AuthenticatedStack() {
         headerStyle: { backgroundColor: Colors.primary500 },
         headerTintColor: 'white',
         contentStyle: { backgroundColor: Colors.primary100 },
-      }}
-    >
+      }} >
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
         headerRight: ({tintColor}) => <IconButton  
         icon="exit" color={tintColor} 
@@ -75,13 +81,32 @@ function Navigation() {
    </NavigationContainer>
     );
 }
+function Root(){
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
+  const authCtx = useContext(AuthContext);
+  useEffect(() => {
+    async function fetchToken(){
+    const storedToken = await AsyncStorage.getItem('token');
+    if(storedToken){
+      authCtx.authenticate(storedToken);
+    }
+    setIsTryingLogin(false);
+    }
+    fetchToken();
+   }, []);
 
+   if(isTryingLogin){
+     return <AppLoading />
+   }
+  return   <Navigation /> 
+}
 export default function App() {
+
   return (
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
-      <Navigation />
+       <Root />
      </AuthContextProvider>
     </>
   );
