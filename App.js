@@ -47,6 +47,11 @@ import IconButton from './components/ui/IconButton';
 // };
 
 // firebase.initializeApp(firebaseConfig);
+
+//build apk command 
+// npm install -g eas-cli  
+// eas build:configure
+// eas build -p android --profile preview
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
